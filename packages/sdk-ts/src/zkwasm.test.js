@@ -5,9 +5,14 @@ test("runs basic JSModule correctly", async () => {
     function add(a, b) {
         return a + b;
     }
+    function subtract(a, b) {
+        return a - b;
+    }
   `);
-  const { result, proof } = await mod.call("add", [1, 2]);
+  const a = Math.random();
+  const b = Math.random();
+  const { result, proof } = await mod.call("subtract", [a, b]);
   mod.destroy();
-  expect(result).toBe(3);
+  expect(result).toBe(a - b);
   expect(await verify(proof)).toBe(true);
 }, 15_000);

@@ -1,6 +1,7 @@
 import { openDB } from "idb";
 import Worker from "web-worker";
 
+const WORKER_STR = '';
 const DB_NAME = "hysdk";
 const STORE_NAME = "state";
 
@@ -12,16 +13,10 @@ async function initDB() {
   });
 }
 
-let cachedWorkerContents: string | undefined = undefined;
-
 async function initWorker(): Promise<Worker> {
-  if (!cachedWorkerContents) {
-    let workerRes = await fetch("https://dl.kartikn.com/file/worker.mjs");
-    cachedWorkerContents = await workerRes.text();
-  }
 
   let worker = new Worker(
-    `data:application/javascript,${encodeURIComponent(cachedWorkerContents)}`,
+    `data:application/javascript,${encodeURIComponent(WORKER_STR)}`,
     {
       type: "module",
     }

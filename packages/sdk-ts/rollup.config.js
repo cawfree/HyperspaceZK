@@ -1,6 +1,9 @@
+import * as fs from "fs";
+
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
+import replace from "@rollup/plugin-replace";
 
 export default [
   {
@@ -11,7 +14,14 @@ export default [
         format: "cjs",
       },
     ],
-    plugins: [typescript(), commonjs()],
+    plugins: [
+      replace({
+        'WORKER_STR': JSON.stringify(fs.readFileSync(require.resolve('./src/worker.mjs'), 'utf8')),
+        preventAssignment: true,
+      }),
+      typescript(),
+      commonjs(),
+    ],
   },
   {
     input: "src/zkwasm.ts",
